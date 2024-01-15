@@ -8,7 +8,7 @@ import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <div>
+  <div class="bg-blue-grey-lighten-5 h-screen">
     <RouterView />
   </div>
 </template>
