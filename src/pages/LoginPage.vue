@@ -1,26 +1,33 @@
 <script>
 import { defineComponent, ref } from 'vue'
+import { RecoverPassWord, SigIn, SignUp } from '../components/'
 
 export default defineComponent({
+  components: {
+    RecoverPassWord,
+    SigIn,
+    SignUp
+  },
   setup() {
     const step = ref(1)
     const interStep = ref(2)
-    const passwordShow = ref(false)
-    const newPasswordShow = ref(false)
-    const checkNewPasswordShow = ref(false)
 
     const signUp = () => {
       step.value++
       interStep.value = 2
     }
 
+    const interStepPlus = () => (interStep.value = interStep.value + 1)
+    const interStepLess = () => (interStep.value = interStep.value - 1)
+    const stepLess = () => (step.value = step.value - 1)
+
     return {
       step,
       interStep,
       signUp,
-      passwordShow,
-      newPasswordShow,
-      checkNewPasswordShow
+      interStepPlus,
+      interStepLess,
+      stepLess
     }
   }
 })
@@ -38,72 +45,10 @@ export default defineComponent({
                   <v-card-text class="mt-12">
                     <v-window v-model="interStep">
                       <v-window-item :value="2">
-                        <h2 class="text-center text-deep-purple-darken-2">
-                          Faça login na sua conta
-                        </h2>
-                        <v-text-field
-                          label="Email"
-                          variant="outlined"
-                          color="primary"
-                          autocomplete="false"
-                          placeholder="nome@gmail.com"
-                          type="email"
-                          class="mt-10"
-                          hint="Entre com seu login/email"
-                          prepend-inner-icon="fas fa-light fa-envelope"
-                        />
-                        <v-text-field
-                          label="Senha"
-                          variant="outlined"
-                          color="blue"
-                          autocomplete="false"
-                          :type="passwordShow ? 'text' : 'password'"
-                          hint="Digite sua senha"
-                          class="mt-2 mb-5"
-                          prepend-inner-icon="fas fa-regular fa-key"
-                          :append-inner-icon="passwordShow ? 'fas fa-eye' : 'fas fa-eye-slash'"
-                          @click:append-inner="passwordShow = !passwordShow"
-                        />
-
-                        <v-btn color="blue text-button" class="mb-5" size="large" dark block tile
-                          >Entre</v-btn
-                        >
-                        <div class="text-center">
-                          <a
-                            href="#"
-                            class="text-decoration-none text-blue font-weight-bold text-center"
-                            @click="interStep--"
-                            >Esqueci a senha</a
-                          >
-                        </div>
+                        <SigIn :interStepLess="interStepLess" />
                       </v-window-item>
                       <v-window-item :value="1">
-                        <h2 class="text-center text-deep-purple-darken-2">Recupere sua senha</h2>
-                        <h4 class="text-left font-weight-medium text-blue-grey-darken-2 mt-5">
-                          Uma mensagem de recuperação de senha será enviado ao seu email de
-                          cadastro.
-                        </h4>
-                        <v-text-field
-                          label="Email"
-                          variant="outlined"
-                          color="blue"
-                          autocomplete="false"
-                          placeholder="nome@gmail.com"
-                          type="email"
-                          class="mt-10"
-                          prepend-inner-icon="fas fa-light fa-envelope"
-                        />
-
-                        <v-btn
-                          color="blue text-button"
-                          @click="interStep++"
-                          class="mb-5"
-                          size="large"
-                          dark
-                          block
-                          tile
-                          >Recuperar</v-btn
-                        >
+                        <RecoverPassWord :interStepPlus="interStepPlus" />
                       </v-window-item>
                     </v-window>
                   </v-card-text>
@@ -121,71 +66,7 @@ export default defineComponent({
               </v-row>
             </v-window-item>
             <v-window-item :value="2">
-              <v-row>
-                <v-col cols="12" md="6" class="bg-blue rounded-br-xl">
-                  <div style="text-align: center; padding: 180px 0">
-                    <v-card-text class="text-white">
-                      <h2 class="text-center">Já possuí uma conta?</h2>
-                    </v-card-text>
-                    <div class="text-center">
-                      <v-btn color="white" variant="outlined" @click="step--">Log in</v-btn>
-                    </div>
-                  </div>
-                </v-col>
-
-                <v-col cols="12" md="6">
-                  <v-card-text class="mt-3">
-                    <h2 class="text-center text-deep-purple-darken-2">Criar uma conta</h2>
-                    <v-text-field
-                      label="Nome"
-                      variant="outlined"
-                      color="blue"
-                      autocomplete="false"
-                      class="mt-4"
-                      prepend-inner-icon="fas fa-user"
-                    />
-
-                    <v-text-field
-                      label="Sobrenome"
-                      variant="outlined"
-                      color="blue"
-                      autocomplete="false"
-                      prepend-inner-icon="fas fa-user"
-                    />
-
-                    <v-text-field
-                      label="Email"
-                      variant="outlined"
-                      color="blue"
-                      autocomplete="false"
-                      placeholder="nome@gmail.com"
-                      type="email"
-                      prepend-inner-icon="fas fa-light fa-envelope"
-                      required
-                    />
-                    <v-text-field
-                      label="Senha"
-                      variant="outlined"
-                      color="blue"
-                      :type="newPasswordShow ? 'text' : 'password'"
-                      prepend-inner-icon="fas fa-regular fa-key"
-                      :append-inner-icon="newPasswordShow ? 'fas fa-eye' : 'fas fa-eye-slash'"
-                      @click:append-inner="newPasswordShow = !newPasswordShow"
-                      required
-                    />
-                    <v-text-field
-                      label="Confirme a Senha"
-                      variant="outlined"
-                      color="blue"
-                      :type="checkNewPasswordShow ? 'text' : 'password'"
-                      prepend-inner-icon="fas fa-regular fa-check"
-                      :append-inner-icon="checkNewPasswordShow ? 'fas fa-eye' : 'fas fa-eye-slash'"
-                      @click:append-inner="checkNewPasswordShow = !checkNewPasswordShow"
-                    />
-                    <v-btn color="blue" size="large" dark block tile>Criar</v-btn>
-                  </v-card-text>
-                </v-col>
-              </v-row>
+              <SignUp :stepLess="stepLess" />
             </v-window-item>
           </v-window>
         </v-card>
